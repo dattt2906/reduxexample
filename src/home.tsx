@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { json } from "stream/consumers";
+
 
 function Home(){
 
         const users= useSelector((state:any)=>state.users)
         console.log("users:", users)
+       
+        const [image, setImage]= useState([])
+        const [category, setCategory]= useState('')
+        console.log("image:", image)
+        function handleImage(){
+            let formData= new FormData()
+            formData.append("category",category )
+            Array.from(image).forEach(item => {
+                formData.append('products', item)
+            })
+            
+
+        }
         return(
 
             <>
@@ -42,6 +57,30 @@ function Home(){
 
                         </tbody>
                     </table>
+
+
+                    <div className="upload">
+                        <input multiple type="file" name="file" onChange={(e:any)=> setImage(e.target.files)}></input>
+                        <button onClick={handleImage}>submit</button>
+
+
+                    </div>
+                   
+                {
+                    Array.from(image).map(item=>{
+                        return (
+                            <span>
+                                <img 
+                                style={{padding:"10px"}}
+                                width={150} height={100}
+                                src={item? URL.createObjectURL(item):undefined}/>
+
+                            </span>
+                        )
+
+
+                    })
+                }
 
 
                 </div>
